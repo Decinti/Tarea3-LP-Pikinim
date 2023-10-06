@@ -29,15 +29,24 @@ public class Juego {
         int ubicacion = 5;
         while (turnoActual < 31) {   
             System.out.print("Turno: " + turnoActual);
-            System.out.println(" (Cyan - "+ cyan.getCantidad() +", Amarillo - " + amarillo.getCantidad() + ", Magenta - " + magenta.getCantidad() +")");
+            // Impresion de los pikinims 
+            System.out.print("  Pikinims: ");
+            System.out.print("Cyan: " + cyan.getCantidad() + "  ");
+            System.out.print("Magenta: " + magenta.getCantidad() + "  ");
+            System.out.print("Amarillo: " + amarillo.getCantidad() + "  "); 
             turnoActual += 1; 
-
+            
+            // Si la zona ya fue completada, entonces no se puede interactuar con ella
             System.out.print("Zona Actual: " + nombreZona[ubicacion]);
             System.out.print(" (");
             if (ubicacion == 0 | ubicacion == 5 | ubicacion == 7 ) { //para zonas con PIEZA
                 System.out.print("peso - " + ((Pieza)mapa[ubicacion]).getPeso());
             } else if (ubicacion == 1 | ubicacion == 2 | ubicacion == 6 | ubicacion == 9) {
-                System.out.print("vida - " + ((Enemigo)mapa[ubicacion]).getVida() + "peso - " + ((Enemigo)mapa[ubicacion]).getPeso() + "ataque - " + ((Enemigo)mapa[ubicacion]).getAtaque());
+                if (((Enemigo)mapa[ubicacion]).getVida() <= 0) {
+                    System.out.print("Zona completada");
+                } else {
+                    System.out.print("vida - " + ((Enemigo)mapa[ubicacion]).getVida() + "peso - " + ((Enemigo)mapa[ubicacion]).getPeso() + "ataque - " + ((Enemigo)mapa[ubicacion]).getAtaque());
+                }
             } else if (ubicacion == 3 | ubicacion == 8){
                 System.out.print("cantidad - " + ((Pildora)mapa[ubicacion]).getCantidad());
             } else if (ubicacion == 4 | ubicacion == 10){
@@ -68,11 +77,16 @@ public class Juego {
 
                 case 3: 
                     System.out.println("Lomiar decide quedarse en la misma casilla");
-
+                    break;
                 case 4:
                     turnoActual = 31;
+                    break;
             }
-            if (mapa[ubicacion] instanceof Pieza){
+            if (mapa[ubicacion].getCompletada()) {
+
+                System.out.println("No queda nada que hacer aqui...");
+
+            } else if (mapa[ubicacion] instanceof Pieza){
                 ((Pieza)mapa[ubicacion]).interactuar(cyan, magenta, amarillo);
 
             } else if (mapa[ubicacion] instanceof Enemigo){
